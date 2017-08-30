@@ -1,0 +1,33 @@
+---
+- name: Install monit package
+  apt:
+    pkg: monit
+    update_cache: yes
+    state: present
+  tags: monit
+
+- name: Copy monit defaults file
+  copy:
+    src: monit
+    dest: /etc/default/monit
+    owner: root
+    group: root
+    mode: 0644
+  notify: monit restart
+  tags: monit
+
+- name: Build and copy main monit config file
+  template:
+    src: monitrc.j2
+    dest: /etc/monit/monitrc
+    owner: root
+    group: root
+    mode: 0600
+  notify: monit restart
+  tags: monit
+
+- name: Enable monit service
+  service:
+    name: monit
+    enabled: yes
+  tags: monit

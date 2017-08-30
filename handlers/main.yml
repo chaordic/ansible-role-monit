@@ -1,0 +1,3 @@
+---
+- name: monit restart
+  action: service name=monit state=restarted
