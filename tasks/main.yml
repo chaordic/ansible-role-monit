@@ -1,9 +1,10 @@
 ---
 - name: Install monit package
   apt:
-    pkg: monit
+    pkg: "{{ monit_package_name }}"
     update_cache: yes
     state: present
+    force: "{{ monit_package_force_install }}"
   tags: monit
 
 - name: Copy monit defaults file
