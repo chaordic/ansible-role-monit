@@ -14,7 +14,7 @@
     owner: root
     group: root
     mode: 0644
-  notify: monit restart
+  notify: monit reload
   tags: monit
 
 - name: Build and copy main monit config file
@@ -24,11 +24,12 @@
     owner: root
     group: root
     mode: 0600
-  notify: monit restart
+  notify: monit reload
   tags: monit
 
 - name: Enable monit service
   service:
     name: monit
     enabled: yes
+    state: started
   tags: monit
