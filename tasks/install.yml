@@ -1,0 +1,37 @@
+---
+- name: Check monit binary
+  stat:
+    path: /usr/bin/monit
+  register: monit_binary
+
+- block:
+
+  - name: Download monit
+    get_url:
+      url: "{{ monit_url }}"
+      dest: /tmp
+
+  - name: Extract monit
+    unarchive:
+      src: "/tmp/monit-{{ monit_version }}-{{ monit_linux_arch }}.tar.gz"
+      dest: "/tmp"
+      remote_src: yes
+
+  - name: Copy monit binary
+    copy:
+      src: "/tmp/monit-{{ monit_version }}/bin/monit"
+      dest: /usr/bin/monit
+      owner: root
+      group: root
+      remote_src: yes
+      mode: 0755
+
+  - name: Clean tmp files
+    file:
+      path: "{{ item }}"
+      state: absent
+    with_items:
+      - "/tmp/monit-{{ monit_version }}-{{ monit_linux_arch }}.tar.gz"
+      - "/tmp/monit-{{ monit_version }}"
+
+  when: not monit_binary.stat.exists

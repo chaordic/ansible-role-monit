@@ -1,0 +1,56 @@
+---
+- name: Check if monit log files exists
+  stat: 
+    path: /var/log/monit.log
+  register: log_file
+
+- name: Create monit log file
+  file:
+    path: /var/log/monit.log
+    state: touch
+    owner: root
+    group: root
+    mode: 0755
+  when: not log_file.stat.exists
+
+- name: Ensure monit log file permissions
+  file:
+    path: /var/log/monit.log
+    state: file
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Ensure monit directory exists
+  file:
+    path: /etc/monit
+    state: directory
+    owner: root
+    group: root
+    mode: 0600
+
+- name: Copy init script
+  copy:
+    src: monit-init
+    dest: /etc/init.d/monit
+    owner: root
+    group: root
+    mode: 0755
+  tags: teste
+
+- name: Enable monit service
+  service:
+    name: monit
+    enabled: yes
+    state: started
+  tags: monit
+
+- name: Build and copy main monit config file
+  template:
+    src: monitrc.j2
+    dest: /etc/monit/monitrc
+    owner: root
+    group: root
+    mode: 0600
+  notify: monit reload
+  tags: monit
