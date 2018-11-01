@@ -1,5 +1,5 @@
 ---
-- name: Check if monit log files exists
+- name: Check if monit log file exists
   stat: 
     path: /var/log/monit.log
   register: log_file
