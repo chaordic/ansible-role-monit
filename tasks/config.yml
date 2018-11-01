@@ -13,21 +13,26 @@
     mode: 0755
   when: not log_file.stat.exists
 
-- name: Ensure monit log file permissions
+- name: Ensure required monit dirs exists
   file:
-    path: /var/log/monit.log
-    state: file
+    path: "{{ item.path }}"
+    state: "{{ item.state }}"
     owner: root
     group: root
-    mode: 0755
-
-- name: Ensure monit directory exists
-  file:
-    path: /etc/monit
-    state: directory
-    owner: root
-    group: root
-    mode: 0600
+    mode: "{{ item.mode }}"
+  with_items:
+    - path: /var/log/monit.log
+      state: file
+      mode: '0755'
+    - path: /etc/monit
+      state: directory
+      mode: '0600'
+    - path: /etc/monit/conf.d
+      state: directory
+      mode: '0600'
+    - path: /var/lib/monit
+      state: directory
+      mode: '0755'
 
 - name: Copy init script
   copy:
@@ -36,14 +41,15 @@
     owner: root
     group: root
     mode: 0755
-  tags: teste
 
-- name: Enable monit service
-  service:
-    name: monit
-    enabled: yes
-    state: started
-  tags: monit
+- name: Copy monit defaults file
+  copy:
+    src: monit
+    dest: /etc/default/monit
+    owner: root
+    group: root
+    mode: 0600
+  notify: monit reload
 
 - name: Build and copy main monit config file
   template:
@@ -53,4 +59,16 @@
     group: root
     mode: 0600
   notify: monit reload
-  tags: monit
+
+- name: Link monitorc
+  file:
+    src: /etc/monit/monitrc
+    dest: /etc/monitrc
+    state: link
+  notify: monit reload
+
+- name: Enable monit service
+  service:
+    name: monit
+    enabled: yes
+    state: started
