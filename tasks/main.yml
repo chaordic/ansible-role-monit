@@ -1,35 +1,5 @@
 ---
-- name: Install monit package
-  apt:
-    pkg: "{{ monit_package_name }}"
-    update_cache: yes
-    state: present
-    force: "{{ monit_package_force_install }}"
+- include: install.yml
   tags: monit
-
-- name: Copy monit defaults file
-  copy:
-    src: monit
-    dest: /etc/default/monit
-    owner: root
-    group: root
-    mode: 0644
-  notify: monit reload
-  tags: monit
-
-- name: Build and copy main monit config file
-  template:
-    src: monitrc.j2
-    dest: /etc/monit/monitrc
-    owner: root
-    group: root
-    mode: 0600
-  notify: monit reload
-  tags: monit
-
-- name: Enable monit service
-  service:
-    name: monit
-    enabled: yes
-    state: started
+- include: config.yml
   tags: monit
