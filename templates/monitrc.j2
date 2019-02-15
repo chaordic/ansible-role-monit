@@ -107,25 +107,24 @@ set eventqueue
 ## services monitored, the current configuration, actual services parameters
 ## and manage services from a web interface.
 #
-{% if monit_httpd_enable %}
-set httpd port {{ monit_httpd_port }} and
-    use address {{ monit_httpd_use_address }} # only accept connection from localhost
-    {% for allow_value in monit_httpd_allow %}
-    allow {{ allow_value }}
-    {% endfor %}
-#    allow localhost        # allow localhost to connect to the server and
-#    allow @admin
-#     allow admin:monit      # require user 'admin' with password 'monit'
-#     allow @monit           # allow users of group 'monit' to connect (rw)
-#     allow @users readonly  # allow users of group 'users' to connect readonly
-{% else %}
-#set httpd port 2812 and
+#  set httpd port 2812 and
 #    use address {{ monit_httpd_use_address }} # only accept connection from localhost
 #    allow localhost        # allow localhost to connect to the server and
 #    allow @admin
-#     allow admin:monit      # require user 'admin' with password 'monit'
-#     allow @monit           # allow users of group 'monit' to connect (rw)
-#     allow @users readonly  # allow users of group 'users' to connect readonly
+#    allow admin:monit      # require user 'admin' with password 'monit'
+#    allow @monit           # allow users of group 'monit' to connect (rw)
+#    allow @users readonly  # allow users of group 'users' to connect readonly
+#
+{% if monit_httpd_enable %}
+{% if monit_httpd_mode == 'unixsocket' %}
+set httpd unixsocket {{ monit_unixsocket_path }}
+{% else %}
+set httpd port {{ monit_httpd_port }} and
+    use address {{ monit_httpd_use_address }}
+{% for allow_value in monit_httpd_allow %}
+    allow {{ allow_value }}
+{% endfor %}
+{% endif %}
 {% endif %}
 #
 #
@@ -250,6 +249,6 @@ set httpd port {{ monit_httpd_port }} and
 ## It is possible to include additional configuration parts from other files or
 ## directories.
 #
-include /etc/monit/conf.d/*
+include {{ monit_path_confd }}/*
 #
 #

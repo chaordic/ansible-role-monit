@@ -1,5 +1,13 @@
 ---
+- name: Set monit vars on RHEL OS
+  set_fact:
+    monit_path_main_cfg: /etc/monitrc
+    monit_path_confd: /etc/monit.d
+    monit_path_bin: /bin/monit
+  when: ansible_os_family == 'RedHat'
+
 - include: install.yml
   tags: monit
+
 - include: config.yml
   tags: monit

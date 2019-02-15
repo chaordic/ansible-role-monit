@@ -5,6 +5,7 @@
 
 # Set START to yes to start the monit
 START=yes
+startup=1
 
 # Options to pass to monit
 #MONIT_OPTS=

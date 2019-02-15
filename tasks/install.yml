@@ -1,7 +1,7 @@
 ---
 - name: Check monit binary
   stat:
-    path: /usr/bin/monit
+    path: "{{ monit_path_bin }}"
   register: monit_binary
 
 - block:
@@ -20,7 +20,7 @@
   - name: Copy monit binary
     copy:
       src: "/tmp/monit-{{ monit_version }}/bin/monit"
-      dest: /usr/bin/monit
+      dest: "{{ monit_path_bin }}"
       owner: root
       group: root
       remote_src: yes

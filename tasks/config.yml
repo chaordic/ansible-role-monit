@@ -4,15 +4,6 @@
     path: /var/log/monit.log
   register: log_file
 
-- name: Create monit log file
-  file:
-    path: /var/log/monit.log
-    state: touch
-    owner: root
-    group: root
-    mode: '0755'
-  when: not log_file.stat.exists
-
 - name: Ensure required monit dirs exists
   file:
     path: "{{ item.path }}"
@@ -20,16 +11,18 @@
     owner: root
     group: root
     mode: "{{ item.mode }}"
+  when: item.when | d(true)
   with_items:
     - path: /var/log/monit.log
       state: file
-      mode: '0755'
+      mode: '0644'
     - path: /etc/monit
       state: directory
-      mode: '0600'
-    - path: /etc/monit/conf.d
+      mode: '0755'
+      when: ansible_os_family != "RedHat"
+    - path: "{{ monit_path_confd }}"
       state: directory
-      mode: '0600'
+      mode: '0755'
     - path: /var/lib/monit
       state: directory
       mode: '0755'
@@ -41,6 +34,7 @@
     owner: root
     group: root
     mode: '0755'
+  when: ansible_os_family != 'RedHat'
 
 - name: Copy monit defaults file
   copy:
@@ -48,23 +42,16 @@
     dest: /etc/default/monit
     owner: root
     group: root
-    mode: '0600'
+    mode: '0644'
   notify: monit reload
 
-- name: Build and copy main monit config file
+- name: Setup main monit conf file
   template:
     src: monitrc.j2
-    dest: /etc/monit/monitrc
+    dest: "{{ monit_path_main_cfg }}"
     owner: root
     group: root
     mode: '0600'
-  notify: monit reload
-
-- name: Link monitorc
-  file:
-    src: /etc/monit/monitrc
-    dest: /etc/monitrc
-    state: link
   notify: monit reload
 
 - name: Enable monit service
