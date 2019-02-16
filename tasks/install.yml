@@ -4,8 +4,8 @@
     path: "{{ monit_path_bin }}"
   register: monit_binary
 
-- block:
-
+- name: install with tarbal
+  block:
   - name: Download monit
     get_url:
       url: "{{ monit_url }}"
@@ -34,4 +34,15 @@
       - "/tmp/monit-{{ monit_version }}-{{ monit_linux_arch }}.tar.gz"
       - "/tmp/monit-{{ monit_version }}"
 
-  when: not monit_binary.stat.exists
+  when:
+    - not monit_binary.stat.exists
+    - monit_install_source == 'tarbal'
+
+- name: install from repo
+  block:
+    - package:
+        name: "{{ monit_package_name }}"
+        state: present
+  when:
+    - not monit_binary.stat.exists
+    - monit_install_source == 'repo'

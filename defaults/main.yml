@@ -1,9 +1,14 @@
 ---
 monit_linux_arch: linux-x64
 monit_version: 5.25.2
-monit_url: "https://mmonit.com/monit/dist/binary/{{ monit_version }}/monit-{{ monit_version }}-{{ monit_linux_arch }}.tar.gz"
-monit_path_bin: /usr/bin/monit
 
+monit_install_source: tarbal
+monit_url: "https://mmonit.com/monit/dist/binary/{{ monit_version }}/monit-{{ monit_version }}-{{ monit_linux_arch }}.tar.gz"
+
+# use only when monit_install_source==repo
+monit_package_name: monit
+
+monit_path_bin: /usr/bin/monit
 
 monit_path_main_cfg: /etc/monit/monitrc
 monit_path_confd: /etc/monit/conf.d
