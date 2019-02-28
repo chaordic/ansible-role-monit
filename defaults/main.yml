@@ -2,7 +2,7 @@
 monit_linux_arch: linux-x64
 monit_version: 5.25.2
 
-monit_install_source: tarbal
+monit_install_source: tarball
 monit_url: "https://mmonit.com/monit/dist/binary/{{ monit_version }}/monit-{{ monit_version }}-{{ monit_linux_arch }}.tar.gz"
 
 # use only when monit_install_source==repo
@@ -14,7 +14,7 @@ monit_path_main_cfg: /etc/monit/monitrc
 monit_path_confd: /etc/monit/conf.d
 
 monit_httpd_enable: no
-monit_httpd_mode: ""  # port|unixsocket
+monit_httpd_mode: "port"  # port|unixsocket
 
 monit_unixsocket_path: /root/monit.socket
 

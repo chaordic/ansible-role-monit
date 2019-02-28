@@ -4,7 +4,7 @@
     path: "{{ monit_path_bin }}"
   register: monit_binary
 
-- name: install with tarbal
+- name: install with tarball
   block:
   - name: Download monit
     get_url:
@@ -36,7 +36,7 @@
 
   when:
     - not monit_binary.stat.exists
-    - monit_install_source == 'tarbal'
+    - monit_install_source == 'tarball'
 
 - name: install from repo
   block:
