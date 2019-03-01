@@ -15,7 +15,7 @@ monit_path_main_cfg: /etc/monitrc
 ## EL use /etc/monit.d
 monit_path_confd: /etc/monit/conf.d
 
-monit_httpd_enable: no
+monit_httpd_enable: yes
 monit_httpd_mode: "port"  # port|unixsocket
 
 monit_unixsocket_path: /root/monit.socket
