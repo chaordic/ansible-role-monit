@@ -21,7 +21,7 @@ set -e
 . /lib/lsb/init-functions
 
 DAEMON=/usr/bin/monit
-CONFIG=/etc/monit/monitrc
+CONFIG=/etc/monitrc
 NAME=monit
 DESC="daemon monitor"
 MONIT_OPTS=
