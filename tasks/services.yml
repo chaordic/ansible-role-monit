@@ -1,7 +1,7 @@
 ---
 - name: copy monit service configuration
   template:
-    src: service.j2
+    src: "{{ item.template | d('service.j2') }}"
     dest: /etc/monit/conf.d/{{ item.name }}
     owner: root
     group: root
