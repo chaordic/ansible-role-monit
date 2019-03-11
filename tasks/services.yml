@@ -1,0 +1,10 @@
+---
+- name: copy monit service configuration
+  template:
+    src: service.j2
+    dest: /etc/monit/conf.d/{{ item.name }}
+    owner: root
+    group: root
+    mode: '0644'
+  with_items: "{{ monit_services }}"
+  notify: monit reload
