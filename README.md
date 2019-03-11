@@ -20,6 +20,7 @@ For a simple installation and configuration, there is no mandatory variable.
     monit_version: 5.25.2
     monit_httpd_enable: true
     monit_services:
+      # role managed template
       - name: web-service
         start_program: /etc/init.d/web-service start
         stop_program: /etc/init.d/web-service stop
@@ -27,6 +28,9 @@ For a simple installation and configuration, there is no mandatory variable.
         extra_config: |
           if failed host localhost port 8080
           protocol HTTP request "/healthcheck" then restart
+      # custom template
+      - name: mail
+        template: mail.j2
 
   roles:
     - role: monit.chaordic
