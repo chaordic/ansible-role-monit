@@ -10,7 +10,12 @@ monit_package_name: monit
 
 monit_path_bin: /usr/bin/monit
 
-monit_path_main_cfg: /etc/monitrc
+monit_path_main_cfg: "\
+  {% if ansible_os_family == 'RedHat' %}\
+    /etc/monitrc\
+  {% else %}\
+    /etc/monit/monitrc\
+  {% endif %}"
 
 ## EL use /etc/monit.d
 monit_path_confd: /etc/monit/conf.d

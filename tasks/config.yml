@@ -32,6 +32,7 @@
     group: root
     mode: '0755'
   when: ansible_os_family != 'RedHat'
+  notify: monit restart
 
 - name: Copy monit defaults file
   copy:
@@ -40,7 +41,7 @@
     owner: root
     group: root
     mode: '0644'
-  notify: monit reload
+  notify: monit restart
 
 - name: Setup main monit conf file
   template:
@@ -49,7 +50,7 @@
     owner: root
     group: root
     mode: '0600'
-  notify: monit reload
+  notify: monit restart
 
 - name: Enable monit service
   service:
