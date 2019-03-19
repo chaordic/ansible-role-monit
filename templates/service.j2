@@ -1,0 +1,11 @@
+# {{ ansible_managed }}
+
+check {{ item.name }} with pidfile {{ item.pidfile_path | d('/var/run/'+item.name+'.pid') }}
+    start program = "{{ item.start_program }}"
+    {% if item.start_timeout is defined and item.start_timeout != 0 -%}
+    with timeout {{ item.start_timeout }} seconds
+    {% endif -%}
+    stop  program = "{{ item.stop_program }}"
+    {% if item.extra_config is defined -%}
+    {{ item.extra_config | indent }}
+    {% endif -%}

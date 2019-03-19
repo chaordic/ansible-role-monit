@@ -1,5 +1,10 @@
 ---
 - include: install.yml
-  tags: monit
+  tags: monit-install
+
 - include: config.yml
-  tags: monit
+  tags: monit-config
+
+- include: services.yml
+  tags: monit-services
+  when: monit_services|length > 0
