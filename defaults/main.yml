@@ -11,3 +11,5 @@ monit_httpd_port: 2812
 monit_httpd_use_address: localhost
 monit_httpd_allow:
   - localhost
+
+monit_init_start: true

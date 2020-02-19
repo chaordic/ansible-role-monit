@@ -19,6 +19,7 @@ For a simple installation and configuration, there is no mandatory variable.
     monit_linux_arch: linux-x64
     monit_version: 5.25.2
     monit_httpd_enable: true
+    monit_init_start: true
     monit_services:
       # role managed template
       - name: web-service
