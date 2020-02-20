@@ -3,8 +3,10 @@
   service:
     name: monit
     state: restarted
+  when: monit_init_start|bool
 
 - name: monit reload
   service:
     name: monit
     state: reloaded
+  when: monit_init_start|bool
